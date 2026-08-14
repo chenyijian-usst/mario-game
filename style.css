@@ -1,0 +1,207 @@
+/* ============================================================
+   超级马里奥 · 像素平台跳跃 · 样式
+   ============================================================ */
+
+:root {
+  --panel-bg: rgba(20, 18, 40, 0.92);
+  --accent: #ffd23f;
+  --accent-red: #e52521;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: #0b0c18;
+  font-family: 'Courier New', 'Microsoft YaHei', monospace;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+#stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 30%, #1a1f3d, #07080f);
+}
+
+canvas#game {
+  display: block;
+  background: linear-gradient(180deg, #3a6ff0 0%, #5c94fc 55%, #b3e5ff 80%);
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  max-width: 100vw;
+  max-height: 100vh;
+  image-rendering: pixelated;      /* 像素风 */
+  image-rendering: crisp-edges;
+}
+
+/* ---------- HUD ---------- */
+.hud {
+  position: absolute;
+  top: 10px; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 18px;
+  padding: 7px 18px;
+  background: rgba(10, 10, 24, 0.72);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  letter-spacing: 1px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hud__item { display: flex; align-items: center; gap: 6px; }
+.hud__label { color: var(--accent); font-size: 12px; text-transform: uppercase; }
+
+/* ---------- 覆盖层 ---------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 8, 20, 0.72);
+  backdrop-filter: blur(3px);
+  transition: opacity 0.25s ease;
+  z-index: 10;
+  overflow-y: auto;
+  padding: 20px 0;
+}
+.overlay.hidden { opacity: 0; pointer-events: none; }
+
+.panel {
+  background: var(--panel-bg);
+  border: 3px solid var(--accent);
+  border-radius: 16px;
+  padding: 28px 36px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(255, 210, 63, 0.2), 0 20px 50px rgba(0, 0, 0, 0.6);
+  max-width: min(92vw, 460px);
+}
+.panel__title {
+  font-size: 2rem;
+  color: var(--accent);
+  text-shadow: 2px 2px 0 var(--accent-red);
+  margin-bottom: 6px;
+}
+.panel__sub { color: #cfd6ff; margin-bottom: 16px; }
+.panel__help { list-style: none; margin: 0 0 18px; line-height: 1.85; color: #e8ecff; font-size: 14px; }
+.panel__help b { color: var(--accent); }
+.panel__score { margin: 6px 0 14px; font-size: 16px; }
+.panel__score b { color: var(--accent); font-size: 22px; }
+.panel__hint { margin-top: 10px; font-size: 12px; color: #9aa1c9; }
+
+/* ---------- 排行榜 ---------- */
+.leaderboard {
+  margin: 16px 0 18px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  text-align: left;
+}
+.leaderboard__title { font-size: 15px; color: var(--accent); margin-bottom: 8px; text-align: center; }
+.leaderboard__list { list-style: none; font-size: 14px; }
+.leaderboard__list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 0;
+  color: #e8ecff;
+}
+.lb-rank {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #3a1d00;
+  font-weight: bold;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.lb-score { font-weight: bold; color: #fff; }
+.lb-meta { margin-left: auto; color: #9aa1c9; font-size: 12px; }
+
+/* ---------- 按钮 ---------- */
+.btn {
+  display: inline-block;
+  padding: 13px 30px;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #3a1d00;
+  background: linear-gradient(180deg, #ffe27a, #ffb52e);
+  border: 3px solid #fff;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #b87700, 0 10px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #b87700; }
+
+/* ---------- 移动端触控 ---------- */
+.touch-controls {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.touch-controls__left {
+  position: absolute;
+  left: 18px; bottom: 20px;
+  display: flex; gap: 14px;
+}
+.touch-controls__right {
+  position: absolute;
+  right: 18px; bottom: 20px;
+  display: flex; gap: 14px; align-items: flex-end;
+}
+.tbtn {
+  pointer-events: auto;
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+}
+.tbtn--fire {
+  background: rgba(255, 157, 59, 0.55);
+  width: 56px; height: 56px;
+}
+.tbtn--jump {
+  width: 76px; height: 76px;
+  background: rgba(229, 37, 33, 0.55);
+}
+.tbtn:active { background: rgba(255, 255, 255, 0.4); }
+.tbtn--fire:active { background: rgba(255, 157, 59, 0.85); }
+.tbtn--jump:active { background: rgba(229, 37, 33, 0.85); }
+
+/* 桌面默认隐藏触控按钮 */
+.touch-controls { display: none; }
+@media (hover: none) and (pointer: coarse) {
+  .touch-controls { display: block; }
+}
+
+/* 小屏适配 */
+@media (max-width: 640px) {
+  .hud { gap: 10px; font-size: 13px; padding: 5px 12px; }
+  .hud__label { font-size: 10px; }
+  .panel { padding: 20px 16px; }
+  .panel__title { font-size: 1.5rem; }
+}
