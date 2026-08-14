@@ -20,19 +20,26 @@
       <div class="hud__item"><span class="hud__label">时间</span><span id="hud-time">300</span></div>
     </div>
 
+    <!-- 暂停按钮（游戏中可见） -->
+    <button class="pause-btn" id="btn-pause" aria-label="暂停">⏸</button>
+
     <!-- 标题覆盖层 -->
     <div class="overlay" id="overlay-title">
       <div class="panel">
         <h1 class="panel__title">🍄 超级马里奥</h1>
-        <p class="panel__sub">像素平台跳跃 · 3 大关卡</p>
+        <p class="panel__sub">像素平台跳跃 · 6 大关卡</p>
         <ul class="panel__help">
           <li><b>移动</b>：← → 或 A / D　<b>跳跃</b>：↑ / W / 空格</li>
           <li><b>火球</b>：X 键（需先吃到火焰花 🌸）</li>
           <li><b>踩敌人</b>得分 · <b>金币</b>加分 · 抵达 <b>旗子</b> 通关</li>
           <li>🍄 变大　🌸 火焰　⭐ 无敌星</li>
         </ul>
-        <button class="btn" id="btn-start">开始游戏</button>
-        <p class="panel__hint">按 Enter 或点击开始</p>
+        <div class="menu-btns">
+          <button class="btn" id="btn-start">开始游戏</button>
+          <button class="btn btn--alt" id="btn-shop">游戏商城</button>
+          <button class="btn btn--alt" id="btn-settings">游戏设置</button>
+        </div>
+        <p class="panel__hint">🪙 金币 <b class="wallet-val">0</b> · 点击开始选择关卡 · Enter 快速选关</p>
         <div class="leaderboard">
           <h2 class="leaderboard__title">🏆 本地排行榜</h2>
           <ol class="leaderboard__list" id="lb-list"></ol>
@@ -40,18 +47,66 @@
       </div>
     </div>
 
+    <!-- 关卡选择覆盖层 -->
+    <div class="overlay hidden" id="overlay-levels">
+      <div class="panel panel--wide">
+        <h1 class="panel__title">🗺️ 选择关卡</h1>
+        <p class="panel__sub">挑一关，开始冒险吧</p>
+        <div class="levels" id="levels-list"></div>
+        <button class="btn btn--ghost" id="btn-back-menu">← 返回主菜单</button>
+      </div>
+    </div>
+
+    <!-- 游戏设置覆盖层 -->
+    <div class="overlay hidden" id="overlay-settings">
+      <div class="panel panel--wide">
+        <h1 class="panel__title">⚙️ 游戏设置</h1>
+        <p class="panel__sub">调整你的游戏体验</p>
+        <div class="settings" id="settings-list"></div>
+        <button class="btn btn--ghost" id="btn-back-menu2">← 返回主菜单</button>
+      </div>
+    </div>
+
+    <!-- 暂停覆盖层 -->
+    <div class="overlay hidden" id="overlay-pause">
+      <div class="panel">
+        <h1 class="panel__title">⏸️ 暂停</h1>
+        <p class="panel__sub">休息一下，还是退出本关？</p>
+        <div class="pause-btns">
+          <button class="btn" id="btn-resume">继续游戏</button>
+          <button class="btn btn--alt" id="btn-restart-level">重新开始本关</button>
+          <button class="btn btn--alt" id="btn-pause-select">选择关卡</button>
+          <button class="btn btn--ghost" id="btn-pause-menu">返回主菜单</button>
+        </div>
+        <p class="panel__hint">按 Esc / Enter 继续游戏</p>
+      </div>
+    </div>
+
+    <!-- 游戏商城覆盖层 -->
+    <div class="overlay hidden" id="overlay-shop">
+      <div class="panel panel--shop">
+        <h1 class="panel__title">🛒 游戏商城</h1>
+        <p class="panel__sub">你的金币：<b class="wallet-val">0</b> 🪙</p>
+        <div class="shop" id="shop-list"></div>
+        <button class="btn btn--ghost" id="btn-back-menu3">← 返回主菜单</button>
+      </div>
+    </div>
+
     <!-- 通关覆盖层 -->
     <div class="overlay hidden" id="overlay-win">
       <div class="panel">
-        <h1 class="panel__title">🎉 全部通关！</h1>
-        <p class="panel__sub">恭喜你通关所有关卡！</p>
-        <p class="panel__score">本局得分：<b id="win-score">0</b></p>
+        <h1 class="panel__title">🎉 通关成功！</h1>
+        <p class="panel__sub">恭喜过关，继续挑战刷新纪录吧！</p>
+        <p class="panel__score">本局得分：<b id="win-score">0</b>　本局金币：<b id="win-coins">0</b> 🪙</p>
         <p class="panel__score">历史最高：<b id="win-best">0</b></p>
         <div class="leaderboard">
           <h2 class="leaderboard__title">🏆 排行榜</h2>
           <ol class="leaderboard__list" id="lb-list-win"></ol>
         </div>
-        <button class="btn" id="btn-restart-win">再玩一次</button>
+        <div class="menu-btns">
+          <button class="btn" id="btn-restart-win">再玩一次</button>
+          <button class="btn btn--alt" id="btn-select-win">重新选择关卡</button>
+        </div>
       </div>
     </div>
 
@@ -59,9 +114,12 @@
     <div class="overlay hidden" id="overlay-over">
       <div class="panel">
         <h1 class="panel__title">💀 游戏结束</h1>
-        <p class="panel__score">本局得分：<b id="over-score">0</b></p>
+        <p class="panel__score">本局得分：<b id="over-score">0</b>　本局金币：<b id="over-coins">0</b> 🪙</p>
         <p class="panel__score">历史最高：<b id="over-best">0</b></p>
-        <button class="btn" id="btn-restart-over">重新开始</button>
+        <div class="menu-btns">
+          <button class="btn" id="btn-restart-over">重新开始游戏</button>
+          <button class="btn btn--alt" id="btn-select-over">重新选择关卡</button>
+        </div>
       </div>
     </div>
 

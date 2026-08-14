@@ -15,7 +15,7 @@
 
   const GRAVITY = 2200;
   const MAX_FALL = 980;
-  const JUMP_VEL = 730;
+  const JUMP_VEL = 780;
   const MOVE_SPEED = 275;
   const ACCEL = 2400;
   const AIR_ACCEL = 1500;
@@ -189,62 +189,164 @@
   const hudLives = document.getElementById('hud-lives');
   const hudTime = document.getElementById('hud-time');
   const overlayTitle = document.getElementById('overlay-title');
+  const overlayLevels = document.getElementById('overlay-levels');
+  const overlaySettings = document.getElementById('overlay-settings');
+  const overlayShop = document.getElementById('overlay-shop');
+  const overlayPause = document.getElementById('overlay-pause');
   const overlayWin = document.getElementById('overlay-win');
   const overlayOver = document.getElementById('overlay-over');
   const lbList = document.getElementById('lb-list');
+  const levelsList = document.getElementById('levels-list');
+  const settingsList = document.getElementById('settings-list');
+  const shopList = document.getElementById('shop-list');
+  const ALL_OVERLAYS = [overlayTitle, overlayLevels, overlaySettings, overlayShop, overlayPause, overlayWin, overlayOver];
 
   /* ================= 关卡数据 ================= */
   const LEVELS = [
     {
-      name: '1-1', cols: 220, time: 300, flagTile: 203,
-      gaps: [[58, 61], [118, 122], [168, 172]],
-      pipes: [[40, 2], [88, 3], [150, 2], [198, 2]],
+      name: '1-1', cols: 210, time: 300, flagTile: 193,
+      title: '草原漫步', desc: '新手起步，道具齐全，熟悉踩怪与顶砖。', diff: '简单', diffClass: 'easy',
+      theme: { skyTop: '#3a6ff0', skyMid: '#5c94fc', skyBot: '#bfe8ff', hill1: '#4fae5a', hill2: '#3f9c4a' },
+      gaps: [[50, 53], [104, 107], [158, 161]],
+      pipes: [[36, 2], [86, 3], [144, 2]],
       blocks: [
-        [26, 8, 'coin'], [27, 8, 'coin'], [28, 8, 'mush'],
-        [52, 8, 'brick'], [53, 8, 'coin'], [54, 8, 'flower'], [55, 8, 'brick'],
-        [82, 8, 'coin'], [83, 8, 'brick'], [84, 8, 'brick'], [85, 8, 'mush'], [86, 8, 'brick'],
-        [136, 8, 'coin'], [137, 8, 'brick'], [138, 8, 'star'], [139, 8, 'brick'], [140, 8, 'coin'],
-        [180, 8, 'brick'], [181, 8, 'flower'], [182, 8, 'brick'], [183, 8, 'coin'], [184, 8, 'brick'],
+        [22, 8, 'coin'], [23, 8, 'coin'], [24, 8, 'mush'],
+        [46, 8, 'brick'], [47, 8, 'flower'], [48, 8, 'brick'],
+        [66, 8, 'coin'], [67, 8, 'star'], [68, 8, 'coin'],
+        [80, 8, 'coin'], [81, 8, 'coin'], [82, 8, 'flower'],
+        [112, 8, 'brick'], [113, 8, 'mush'], [114, 8, 'brick'],
+        [130, 8, 'coin'], [131, 8, 'flower'], [132, 8, 'coin'],
+        [150, 8, 'coin'], [151, 8, 'coin'],
+        [172, 8, 'brick'], [173, 8, 'coin'], [174, 8, 'flower'],
       ],
-      coins: [[14, 9], [15, 9], [16, 9], [17, 9], [18, 9], [59, 7], [60, 7], [120, 7], [121, 7], [169, 7], [170, 7], [171, 7], [92, 6], [93, 5], [94, 5], [95, 5], [96, 5], [97, 6]],
-      enemies: [18, 44, 75, 110, 145, 176],
+      coins: [[14, 9], [15, 9], [16, 9], [17, 9], [18, 9], [56, 7], [57, 7], [58, 7], [92, 7], [93, 7], [120, 7], [121, 7], [122, 7], [154, 7], [155, 7], [182, 8], [183, 8], [184, 8]],
+      enemies: [16, 42, 62, 96, 126, 166, 180],
     },
     {
-      name: '1-2', cols: 252, time: 300, flagTile: 232,
-      gaps: [[45, 48], [72, 75], [100, 106], [130, 134], [160, 165], [190, 194], [215, 218]],
-      pipes: [[30, 2], [60, 3], [120, 2], [175, 3], [205, 2]],
+      name: '1-2', cols: 240, time: 300, flagTile: 222,
+      title: '丘陵飞驰', desc: '坑洞连绵，节奏加快，考验跳跃精准度。', diff: '中等', diffClass: 'normal',
+      theme: { skyTop: '#f97b1f', skyMid: '#ffb84d', skyBot: '#ffe3a3', hill1: '#d98a3d', hill2: '#b26b2a' },
+      gaps: [[38, 41], [74, 77], [110, 114], [146, 149], [182, 185]],
+      pipes: [[26, 2], [60, 3], [96, 2], [132, 3], [166, 2], [200, 2]],
       blocks: [
-        [20, 8, 'coin'], [22, 8, 'mush'], [24, 8, 'coin'],
-        [50, 8, 'flower'], [51, 8, 'brick'], [52, 8, 'brick'],
-        [80, 9, 'coin'], [81, 9, 'brick'], [82, 9, 'star'],
-        [110, 8, 'brick'], [111, 8, 'flower'], [112, 8, 'brick'],
-        [150, 8, 'mush'], [152, 8, 'coin'],
-        [200, 8, 'brick'], [201, 8, 'flower'], [202, 8, 'coin'],
+        [20, 8, 'mush'], [22, 8, 'coin'],
+        [48, 8, 'flower'], [50, 8, 'brick'],
+        [70, 8, 'coin'], [71, 8, 'brick'], [72, 8, 'star'],
+        [88, 8, 'coin'], [89, 8, 'flower'], [90, 8, 'coin'],
+        [120, 8, 'brick'], [121, 8, 'mush'], [122, 8, 'brick'],
+        [140, 8, 'coin'], [141, 8, 'coin'],
+        [156, 8, 'flower'], [158, 8, 'brick'],
+        [172, 8, 'coin'], [173, 8, 'star'], [174, 8, 'coin'],
+        [190, 8, 'brick'], [191, 8, 'flower'], [192, 8, 'brick'],
+        [210, 8, 'mush'], [212, 8, 'coin'],
       ],
-      coins: [[25, 8], [26, 8], [40, 7], [41, 7], [85, 6], [86, 6], [87, 6], [140, 8], [141, 8], [142, 8], [185, 7], [186, 7], [210, 7]],
-      enemies: [16, 35, 55, 90, 125, 155, 185, 225],
+      coins: [[30, 7], [31, 7], [32, 7], [55, 7], [56, 7], [92, 7], [93, 7], [116, 7], [117, 7], [138, 7], [139, 7], [162, 7], [163, 7], [178, 7], [179, 7], [204, 7], [205, 7], [216, 7], [217, 7]],
+      enemies: [12, 34, 52, 66, 84, 102, 124, 152, 176, 196, 214],
     },
     {
-      name: '1-3', cols: 270, time: 300, flagTile: 252,
-      gaps: [[30, 34], [50, 56], [80, 86], [110, 116], [140, 148], [170, 178], [200, 206], [230, 236]],
-      pipes: [[45, 3], [100, 4], [160, 3], [215, 2]],
+      name: '1-3', cols: 260, time: 300, flagTile: 242,
+      title: '暮色山谷', desc: '山谷幽深，节奏再升级，跳跃与走位并重。', diff: '中等', diffClass: 'normal',
+      theme: { skyTop: '#2e2a5e', skyMid: '#6b5a9e', skyBot: '#c9aef0', hill1: '#7a5c9e', hill2: '#5f4780' },
+      gaps: [[28, 31], [60, 63], [92, 96], [126, 129], [158, 161], [190, 193]],
+      pipes: [[46, 3], [78, 2], [112, 3], [142, 2], [174, 3], [206, 2]],
       blocks: [
-        [20, 8, 'star'], [21, 8, 'coin'], [22, 8, 'coin'],
-        [40, 8, 'flower'], [42, 8, 'brick'],
-        [60, 9, 'mush'], [61, 9, 'coin'], [62, 9, 'brick'],
-        [90, 8, 'brick'], [91, 8, 'flower'], [92, 8, 'star'],
-        [120, 8, 'coin'], [121, 8, 'mush'], [122, 8, 'coin'],
-        [150, 8, 'flower'], [151, 8, 'brick'], [152, 8, 'coin'],
-        [180, 9, 'brick'], [181, 9, 'star'], [182, 9, 'brick'],
-        [220, 8, 'coin'], [221, 8, 'flower'], [222, 8, 'coin'],
+        [18, 8, 'star'], [20, 8, 'coin'],
+        [38, 8, 'flower'], [40, 8, 'brick'],
+        [54, 9, 'coin'], [55, 9, 'mush'], [56, 9, 'brick'],
+        [70, 8, 'coin'], [71, 8, 'brick'], [72, 8, 'flower'],
+        [84, 8, 'coin'], [85, 8, 'star'], [86, 8, 'coin'],
+        [102, 8, 'brick'], [103, 8, 'flower'], [104, 8, 'brick'],
+        [118, 8, 'mush'], [119, 8, 'coin'],
+        [134, 8, 'coin'], [135, 8, 'flower'], [136, 8, 'coin'],
+        [150, 8, 'brick'], [151, 8, 'star'], [152, 8, 'brick'],
+        [166, 8, 'coin'], [167, 8, 'flower'],
+        [182, 8, 'brick'], [183, 8, 'coin'], [184, 8, 'flower'],
+        [214, 8, 'mush'], [216, 8, 'coin'],
+        [230, 8, 'star'], [232, 8, 'coin'],
       ],
-      coins: [[25, 7], [26, 7], [27, 7], [55, 6], [56, 6], [57, 6], [85, 7], [86, 7], [115, 6], [145, 7], [175, 6], [205, 6], [225, 7], [226, 7], [227, 7]],
-      enemies: [18, 48, 70, 105, 135, 165, 195, 225, 245],
+      coins: [[24, 7], [25, 7], [52, 7], [53, 7], [88, 6], [89, 6], [90, 6], [108, 7], [109, 7], [122, 7], [123, 7], [146, 7], [147, 7], [154, 7], [155, 7], [170, 7], [171, 7], [198, 7], [199, 7], [210, 7], [211, 7], [236, 7], [237, 7]],
+      enemies: [12, 42, 68, 90, 106, 130, 152, 184, 200, 220],
+    },
+    {
+      name: '2-1', cols: 250, time: 300, flagTile: 232,
+      title: '沙漠绿洲', desc: '黄沙漫漫，视野开阔，保持节奏稳步推进。', diff: '中等', diffClass: 'normal',
+      theme: { skyTop: '#f5a623', skyMid: '#ffcf6b', skyBot: '#ffe9b8', hill1: '#e0a03c', hill2: '#c07a2f' },
+      gaps: [[34, 37], [68, 71], [102, 106], [138, 141], [172, 175], [206, 209]],
+      pipes: [[52, 3], [86, 2], [120, 3], [156, 2], [190, 3]],
+      blocks: [
+        [20, 8, 'mush'], [22, 8, 'coin'],
+        [46, 8, 'coin'], [47, 8, 'flower'], [48, 8, 'coin'],
+        [62, 8, 'brick'], [63, 8, 'star'], [64, 8, 'brick'],
+        [80, 8, 'coin'], [81, 8, 'coin'],
+        [94, 8, 'flower'], [96, 8, 'brick'],
+        [112, 8, 'mush'], [114, 8, 'coin'],
+        [128, 8, 'coin'], [129, 8, 'flower'], [130, 8, 'coin'],
+        [148, 8, 'brick'], [149, 8, 'star'], [150, 8, 'brick'],
+        [164, 8, 'coin'], [165, 8, 'flower'],
+        [182, 8, 'brick'], [183, 8, 'coin'], [184, 8, 'brick'],
+        [198, 8, 'mush'], [200, 8, 'coin'],
+        [214, 8, 'coin'], [215, 8, 'flower'], [216, 8, 'coin'],
+      ],
+      coins: [[26, 7], [27, 7], [28, 7], [56, 7], [57, 7], [90, 7], [91, 7], [110, 7], [111, 7], [124, 7], [125, 7], [144, 7], [145, 7], [160, 7], [161, 7], [178, 7], [179, 7], [194, 7], [195, 7], [220, 7], [221, 7]],
+      enemies: [12, 44, 60, 78, 98, 116, 134, 152, 168, 186, 202, 224],
+    },
+    {
+      name: '2-2', cols: 270, time: 300, flagTile: 252,
+      title: '冰封雪原', desc: '冰天雪地，沟壑交错，滑行般的挑战。', diff: '困难', diffClass: 'hard',
+      theme: { skyTop: '#3a8fd4', skyMid: '#7cc4f0', skyBot: '#e6f7ff', hill1: '#6fa8d8', hill2: '#4f86b8' },
+      gaps: [[30, 33], [62, 65], [96, 100], [130, 133], [162, 165], [194, 198], [226, 229]],
+      pipes: [[46, 3], [80, 2], [114, 3], [148, 2], [180, 3], [210, 2]],
+      blocks: [
+        [18, 8, 'mush'], [20, 8, 'coin'],
+        [40, 8, 'coin'], [41, 8, 'flower'], [42, 8, 'coin'],
+        [56, 8, 'brick'], [57, 8, 'star'], [58, 8, 'brick'],
+        [72, 8, 'coin'], [73, 8, 'flower'], [74, 8, 'coin'],
+        [90, 8, 'brick'], [91, 8, 'coin'], [92, 8, 'brick'],
+        [106, 8, 'flower'], [108, 8, 'coin'],
+        [122, 8, 'coin'], [123, 8, 'mush'], [124, 8, 'coin'],
+        [140, 8, 'brick'], [141, 8, 'star'], [142, 8, 'brick'],
+        [156, 8, 'coin'], [157, 8, 'flower'],
+        [172, 8, 'brick'], [173, 8, 'coin'], [174, 8, 'brick'],
+        [188, 8, 'mush'], [190, 8, 'coin'],
+        [204, 8, 'coin'], [205, 8, 'flower'], [206, 8, 'coin'],
+        [220, 8, 'star'], [222, 8, 'coin'],
+        [240, 8, 'coin'], [241, 8, 'flower'], [242, 8, 'coin'],
+      ],
+      coins: [[24, 7], [25, 7], [52, 7], [53, 7], [86, 7], [87, 7], [110, 7], [111, 7], [118, 7], [119, 7], [136, 7], [137, 7], [144, 7], [145, 7], [168, 7], [169, 7], [184, 7], [185, 7], [200, 7], [201, 7], [216, 7], [217, 7], [234, 7], [235, 7], [246, 7], [247, 7]],
+      enemies: [10, 40, 70, 88, 108, 126, 154, 178, 202, 224, 244],
+    },
+    {
+      name: '2-3', cols: 280, time: 300, flagTile: 262,
+      title: '熔岩城堡', desc: '最终试炼，机关重重，一鼓作气冲到底。', diff: '困难', diffClass: 'hard',
+      theme: { skyTop: '#3a0d0d', skyMid: '#7a1f1f', skyBot: '#e8a16a', hill1: '#8a3a2a', hill2: '#6a2a1a' },
+      gaps: [[26, 29], [56, 59], [88, 92], [122, 125], [154, 157], [186, 190], [218, 221], [244, 247]],
+      pipes: [[40, 3], [72, 2], [104, 3], [136, 2], [168, 3], [200, 2], [230, 3]],
+      blocks: [
+        [16, 8, 'star'], [18, 8, 'coin'],
+        [34, 8, 'coin'], [35, 8, 'mush'], [36, 8, 'coin'],
+        [50, 8, 'brick'], [51, 8, 'flower'], [52, 8, 'brick'],
+        [66, 8, 'coin'], [67, 8, 'coin'],
+        [82, 8, 'flower'], [84, 8, 'brick'],
+        [98, 8, 'coin'], [99, 8, 'star'], [100, 8, 'coin'],
+        [114, 8, 'brick'], [115, 8, 'flower'], [116, 8, 'brick'],
+        [130, 8, 'mush'], [132, 8, 'coin'],
+        [146, 8, 'coin'], [147, 8, 'flower'], [148, 8, 'coin'],
+        [162, 8, 'brick'], [163, 8, 'star'], [164, 8, 'brick'],
+        [180, 8, 'coin'], [181, 8, 'flower'],
+        [194, 8, 'brick'], [195, 8, 'mush'], [196, 8, 'brick'],
+        [210, 8, 'coin'], [211, 8, 'flower'], [212, 8, 'coin'],
+        [224, 8, 'star'], [226, 8, 'coin'],
+        [236, 8, 'coin'], [237, 8, 'flower'], [238, 8, 'coin'],
+        [250, 8, 'brick'], [251, 8, 'star'], [252, 8, 'brick'],
+      ],
+      coins: [[22, 7], [23, 7], [46, 7], [47, 7], [78, 7], [79, 7], [94, 7], [95, 7], [110, 7], [111, 7], [142, 7], [143, 7], [150, 7], [151, 7], [174, 7], [175, 7], [192, 7], [193, 7], [206, 7], [207, 7], [214, 7], [215, 7], [240, 7], [241, 7], [256, 7], [257, 7], [258, 7]],
+      enemies: [10, 32, 62, 80, 96, 128, 150, 176, 202, 226, 240, 254],
     },
   ];
 
   /* ================= 游戏状态 ================= */
-  let state = 'title';          // title | playing | clear | over | win
+  let state = 'title';          // title | levels | settings | shop | playing | clear | over | win
+  let paused = false;
   let levelIdx = 0;
   let grid = [];
   let blockContent = new Map();
@@ -252,10 +354,86 @@
   let clouds = [], hills = [];
   let player, cameraX, flagX, castleX;
   let score = 0, coinCount = 0, lives = 3, timeLeft = 300;
+  let levelStartScore = 0;
   let shakeTime = 0, shakeMag = 0, invuln = 0, starTimer = 0;
   let coyoteTimer = 0, jumpBuffer = 0, fireCooldown = 0;
   let clearTimer = 0, frame = 0, banner = null;
   const input = { left: false, right: false, jumpHeld: false };
+
+  /* ================= 设置 ================= */
+  const SETTINGS_KEY = 'mario-settings-v1';
+  let settings = { sound: true, lives: 3, shake: true, timeMode: true };
+  function loadSettings() {
+    try {
+      const s = JSON.parse(localStorage.getItem(SETTINGS_KEY));
+      if (s && typeof s === 'object') settings = Object.assign(settings, s);
+    } catch (e) {}
+  }
+  function saveSettings() {
+    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) {}
+  }
+
+  /* ================= 皮肤 ================= */
+  const SKINS = [
+    { id: 'classic', name: '经典红帽',   price: 0,  override: {} },
+    { id: 'blue',    name: '海洋蓝',     price: 20, override: { R: '#3a7bd5' } },
+    { id: 'green',   name: '森林绿',     price: 20, override: { R: '#2f9e44' } },
+    { id: 'pink',    name: '樱花粉',     price: 30, override: { R: '#ff6b9d' } },
+    { id: 'purple',  name: '暗夜紫',     price: 30, override: { R: '#8e44ad' } },
+    { id: 'cyan',    name: '冰晶蓝',     price: 45, override: { R: '#00c2c7', B: '#0a7f8a' } },
+    { id: 'gold',    name: '黄金战衣',   price: 60, override: { R: '#ffd23f', B: '#b8860b' } },
+    { id: 'dark',    name: '暗影黑',     price: 80, override: { R: '#3a3a3a', B: '#1a1a1a' } },
+  ];
+  const SKINS_KEY = 'mario-skins-v1';
+  let skinState = { owned: ['classic'], equipped: 'classic' };
+  function loadSkins() {
+    try {
+      const s = JSON.parse(localStorage.getItem(SKINS_KEY));
+      if (s && typeof s === 'object') {
+        skinState.owned = Array.isArray(s.owned) && s.owned.length ? s.owned : ['classic'];
+        skinState.equipped = SKINS.some((k) => k.id === s.equipped) ? s.equipped : 'classic';
+      }
+    } catch (e) {}
+  }
+  function saveSkins() {
+    try { localStorage.setItem(SKINS_KEY, JSON.stringify(skinState)); } catch (e) {}
+  }
+  function playerPalette() {
+    const skin = SKINS.find((s) => s.id === skinState.equipped) || SKINS[0];
+    if (!skin.override || !Object.keys(skin.override).length) return PAL;
+    return Object.assign({}, PAL, skin.override);
+  }
+
+  /* ================= 金币钱包 / 关卡最佳分 ================= */
+  const WALLET_KEY = 'mario-wallet-v1';
+  const LEVEL_BEST_KEY = 'mario-level-best-v1';
+  let wallet = 0;
+  let levelBest = {};
+  function loadWallet() {
+    try { wallet = Math.max(0, parseInt(localStorage.getItem(WALLET_KEY), 10) || 0); } catch (e) {}
+  }
+  function saveWallet() {
+    try { localStorage.setItem(WALLET_KEY, String(wallet)); } catch (e) {}
+  }
+  function loadLevelBest() {
+    try { levelBest = JSON.parse(localStorage.getItem(LEVEL_BEST_KEY)) || {}; } catch (e) { levelBest = {}; }
+  }
+  function saveLevelBest() {
+    try { localStorage.setItem(LEVEL_BEST_KEY, JSON.stringify(levelBest)); } catch (e) {}
+  }
+  function recordLevelBest(levelScore) {
+    const name = LEVELS[levelIdx].name;
+    if (levelScore > (levelBest[name] || 0)) { levelBest[name] = levelScore; saveLevelBest(); }
+  }
+  function bankCoins() {
+    wallet += coinCount;
+    saveWallet();
+    updateWalletUI();
+  }
+  function updateWalletUI() {
+    const els = document.querySelectorAll('.wallet-val');
+    Array.prototype.forEach.call(els, (el) => { el.textContent = wallet; });
+  }
 
   /* ================= 音效 ================= */
   let audioCtx = null;
@@ -264,6 +442,7 @@
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
   }
   function beep(freq, dur, type, vol, slideTo) {
+    if (!settings.sound) return;
     if (!audioCtx) return;
     const t = audioCtx.currentTime;
     const osc = audioCtx.createOscillator();
@@ -320,6 +499,7 @@
   function buildLevel(idx) {
     const L = LEVELS[idx];
     levelIdx = idx;
+    levelStartScore = score;
     grid = [];
     for (let y = 0; y < ROWS; y++) grid.push(new Array(L.cols).fill(T.EMPTY));
     for (let x = 0; x < L.cols; x++) {
@@ -494,7 +674,7 @@
     if (jumpBuffer > 0) jumpBuffer -= dt;
 
     p.x = clamp(p.x, 0, castleX - p.w);
-    if (p.y > VIEW_H + 60) hurtPlayer();
+    if (p.y > VIEW_H + 60) loseLife();
 
     if (Math.abs(p.vx) > 20 && p.onGround) p.runFrame += dt * Math.abs(p.vx) / 16;
     else p.runFrame = 0;
@@ -519,24 +699,33 @@
       sfx.bump();
       return;
     }
+    loseLife();
+  }
+
+  function loseLife() {
+    if (state !== 'playing') return;
     lives--;
     sfx.die();
-    if (lives <= 0) {
-      state = 'over';
-      saveScore(score, levelIdx);
-      document.getElementById('over-score').textContent = score;
-      document.getElementById('over-best').textContent = getBest();
-      renderLeaderboard();
-      showOverlay(overlayOver);
-      return;
-    }
+    if (lives <= 0) { gameOver(); return; }
     respawn();
+  }
+
+  function gameOver() {
+    state = 'over';
+    bankCoins();
+    saveScore(score, levelIdx);
+    document.getElementById('over-score').textContent = score;
+    document.getElementById('over-best').textContent = getBest();
+    document.getElementById('over-coins').textContent = coinCount;
+    renderLeaderboard();
+    showOverlay(overlayOver);
   }
 
   function respawn() {
     player.x = 3 * TILE; player.y = GROUND_TOP * TILE - 32;
     player.vx = 0; player.vy = 0; player.power = 0; player.h = 32;
     cameraX = 0; invuln = 2; starTimer = 0;
+    timeLeft = LEVELS[levelIdx].time;
   }
 
   function stomp(g) {
@@ -555,6 +744,15 @@
       if (g.vy > MAX_FALL) g.vy = MAX_FALL;
       g.onGround = false;
       moveEntity(g, dt, true);
+
+      // 悬崖检测：在地面上时，前方脚下一格若没有地面就掉头，避免摔下悬崖
+      if (g.onGround && !g.dead) {
+        const dir = g.vx >= 0 ? 1 : -1;
+        const frontX = dir > 0 ? g.x + g.w : g.x;
+        if (!isSolidAt(frontX + dir * 2, GROUND_TOP * TILE + TILE / 2)) {
+          g.vx = -g.vx;
+        }
+      }
 
       if (!g.dead && overlap(player, g)) {
         if (starTimer > 0) stomp(g);
@@ -635,7 +833,7 @@
     bumps = bumps.filter((b) => b.t < 0.28);
     particles.forEach((pt) => { pt.vy += 500 * dt; pt.x += pt.vx * dt; pt.y += pt.vy * dt; pt.life -= dt; });
     particles = particles.filter((pt) => pt.life > 0);
-    goombas = goombas.filter((g) => { if (g.dead) { g.squashTimer -= dt; return g.squashTimer > 0; } return true; });
+    goombas = goombas.filter((g) => { if (g.dead) { g.squashTimer -= dt; return g.squashTimer > 0; } return g.y < VIEW_H + 100; });
   }
 
   function overlap(a, b) { return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y; }
@@ -654,6 +852,7 @@
 
   /* ================= 主更新 ================= */
   function update(dt) {
+    if (paused) return;
     frame += dt;
     if (state === 'clear') {
       clearTimer -= dt;
@@ -663,7 +862,7 @@
     }
     if (state !== 'playing') return;
 
-    if (timeLeft > 0) { timeLeft -= dt; if (timeLeft <= 0) { timeLeft = 0; hurtPlayer(); } }
+    if (settings.timeMode && timeLeft > 0) { timeLeft -= dt; if (timeLeft <= 0) { timeLeft = 0; loseLife(); } }
     if (invuln > 0) invuln -= dt;
     if (starTimer > 0) starTimer -= dt;
 
@@ -675,19 +874,21 @@
     updateCamera(dt);
 
     if (player.x + player.w >= flagX) {
+      if (settings.timeMode) score += Math.max(0, Math.floor(timeLeft)) * 10;
+      recordLevelBest(score - levelStartScore);
       if (levelIdx >= LEVELS.length - 1) {
         state = 'win';
-        score += Math.max(0, Math.floor(timeLeft)) * 10;
+        bankCoins();
         saveScore(score, levelIdx);
         document.getElementById('win-score').textContent = score;
         document.getElementById('win-best').textContent = getBest();
+        document.getElementById('win-coins').textContent = coinCount;
         renderLeaderboard();
         sfx.win();
         showOverlay(overlayWin);
       } else {
         state = 'clear';
         clearTimer = 1.6;
-        score += Math.max(0, Math.floor(timeLeft)) * 10;
         banner = { text: '第 ' + LEVELS[levelIdx].name + ' 关通过！', t: 1.6 };
         sfx.clear();
       }
@@ -704,8 +905,13 @@
 
   /* ================= 排行榜 ================= */
   const LB_KEY = 'mario-highscores-v1';
+  let bestScore = 0;
   function loadScores() {
     try { return JSON.parse(localStorage.getItem(LB_KEY)) || []; } catch (e) { return []; }
+  }
+  function refreshBest() {
+    const list = loadScores();
+    bestScore = list.length ? list[0].score : 0;
   }
   function saveScore(s, lvl) {
     const list = loadScores();
@@ -713,11 +919,11 @@
     list.sort((a, b) => b.score - a.score);
     const top = list.slice(0, 5);
     try { localStorage.setItem(LB_KEY, JSON.stringify(top)); } catch (e) {}
+    bestScore = top.length ? top[0].score : 0;
     return top;
   }
   function getBest() {
-    const list = loadScores();
-    return list.length ? list[0].score : 0;
+    return bestScore;
   }
   function renderLeaderboard() {
     const list = loadScores();
@@ -732,12 +938,13 @@
   /* ================= 渲染 ================= */
   function draw() {
     ctx.clearRect(0, 0, VIEW_W, VIEW_H);
+    const th = LEVELS[levelIdx].theme;
     const sky = ctx.createLinearGradient(0, 0, 0, VIEW_H);
-    sky.addColorStop(0, '#3a6ff0'); sky.addColorStop(0.55, '#5c94fc'); sky.addColorStop(1, '#bfe8ff');
+    sky.addColorStop(0, th.skyTop); sky.addColorStop(0.55, th.skyMid); sky.addColorStop(1, th.skyBot);
     ctx.fillStyle = sky; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
 
     let sx = 0, sy = 0;
-    if (shakeTime > 0) { sx = (Math.random() - 0.5) * shakeMag; sy = (Math.random() - 0.5) * shakeMag; }
+    if (settings.shake && shakeTime > 0) { sx = (Math.random() - 0.5) * shakeMag; sy = (Math.random() - 0.5) * shakeMag; }
 
     ctx.save();
     ctx.translate(-cameraX + sx, sy);
@@ -763,12 +970,13 @@
     });
   }
   function drawHills() {
+    const th = LEVELS[levelIdx].theme;
     hills.forEach((h) => {
       const x = h.x - cameraX * 0.5;
       if (x < -300 || x > VIEW_W + 300) return;
-      ctx.fillStyle = '#4fae5a';
+      ctx.fillStyle = th.hill1;
       ctx.beginPath(); ctx.arc(x, GROUND_TOP * TILE, 140 * h.s, Math.PI, 0); ctx.fill();
-      ctx.fillStyle = '#3f9c4a';
+      ctx.fillStyle = th.hill2;
       ctx.beginPath(); ctx.arc(x + 120 * h.s, GROUND_TOP * TILE, 90 * h.s, Math.PI, 0); ctx.fill();
     });
   }
@@ -904,7 +1112,7 @@
     if (starTimer > 0 && Math.floor(frame * 12) % 2 === 0) return;
     const spr = p.power >= 1 ? MARIO_BIG : MARIO_SMALL;
     const bob = p.onGround ? Math.round(Math.sin(p.runFrame * 2) * 2) : 0;
-    drawSprite(spr, p.x, p.y + bob, p.facing < 0, 2);
+    drawSprite(spr, p.x, p.y + bob, p.facing < 0, 2, playerPalette());
   }
 
   function drawParticles() {
@@ -937,12 +1145,12 @@
     hudCoins.textContent = 'x' + String(coinCount).padStart(2, '0');
     hudLevel.textContent = LEVELS[levelIdx].name;
     hudLives.textContent = '❤'.repeat(Math.max(0, lives));
-    hudTime.textContent = Math.max(0, Math.ceil(timeLeft));
+    hudTime.textContent = settings.timeMode ? Math.max(0, Math.ceil(timeLeft)) : '∞';
   }
 
   /* ================= 覆盖层 ================= */
   function showOverlay(el) {
-    [overlayTitle, overlayWin, overlayOver].forEach((o) => o.classList.add('hidden'));
+    ALL_OVERLAYS.forEach((o) => o.classList.add('hidden'));
     el.classList.remove('hidden');
   }
 
@@ -960,9 +1168,26 @@
   window.addEventListener('keydown', (e) => {
     if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space'].includes(e.code)) e.preventDefault();
     ensureAudio();
-    if (e.code === 'KeyX' || e.code === 'KeyF') { if (state === 'playing') shootFire(); return; }
-    if (state === 'title' && (e.code === 'Enter' || e.code === 'Space')) { startGame(); return; }
+    if (e.code === 'KeyX' || e.code === 'KeyF') { if (state === 'playing' && !paused) shootFire(); return; }
+    if (paused) {
+      if (e.code === 'Escape' || e.code === 'Enter' || e.code === 'KeyP') resumeGame();
+      return;
+    }
+    if (e.code === 'Escape' || e.code === 'KeyP') {
+      if (state === 'playing') { pauseGame(); return; }
+      if (state === 'levels' || state === 'settings' || state === 'shop') { backToMenu(); return; }
+      return;
+    }
     if ((state === 'over' || state === 'win') && e.code === 'Enter') { startGame(); return; }
+    if (state === 'title' || state === 'levels' || state === 'settings' || state === 'shop') {
+      if (e.code === 'Enter' || e.code === 'Space') {
+        if (state === 'title') goLevels();
+        else if (state === 'levels') startGame(0);
+        else backToMenu();
+        return;
+      }
+      return;
+    }
     setKey(e.code, true);
   });
   window.addEventListener('keyup', (e) => setKey(e.code, false));
@@ -980,20 +1205,173 @@
   bindHold('btn-right', 'ArrowRight');
   bindHold('btn-jump', 'Space');
   const btnFire = document.getElementById('btn-fire');
-  btnFire.addEventListener('pointerdown', (e) => { e.preventDefault(); ensureAudio(); if (state === 'playing') shootFire(); });
+  btnFire.addEventListener('pointerdown', (e) => { e.preventDefault(); ensureAudio(); if (state === 'playing' && !paused) shootFire(); });
 
-  /* ================= 开始 / 重开 ================= */
-  function startGame() {
+  /* ================= 开始 / 重开 / 导航 ================= */
+  function startGame(idx) {
     ensureAudio();
-    score = 0; coinCount = 0; lives = 3;
-    buildLevel(0);
+    paused = false;
+    score = 0; coinCount = 0; lives = settings.lives;
+    buildLevel(idx === undefined ? levelIdx : idx);
     state = 'playing';
-    [overlayTitle, overlayWin, overlayOver].forEach((o) => o.classList.add('hidden'));
+    ALL_OVERLAYS.forEach((o) => o.classList.add('hidden'));
   }
 
-  document.getElementById('btn-start').addEventListener('click', () => { ensureAudio(); startGame(); });
-  document.getElementById('btn-restart-win').addEventListener('click', startGame);
-  document.getElementById('btn-restart-over').addEventListener('click', startGame);
+  function goLevels() {
+    ensureAudio();
+    paused = false;
+    renderLevels();
+    state = 'levels';
+    showOverlay(overlayLevels);
+  }
+  function goSettings() {
+    ensureAudio();
+    paused = false;
+    renderSettings();
+    state = 'settings';
+    showOverlay(overlaySettings);
+  }
+  function backToMenu() {
+    paused = false;
+    state = 'title';
+    showOverlay(overlayTitle);
+  }
+
+  function goShop() {
+    ensureAudio();
+    paused = false;
+    renderShop();
+    state = 'shop';
+    showOverlay(overlayShop);
+  }
+
+  function pauseGame() {
+    if (state !== 'playing' || paused) return;
+    paused = true;
+    input.left = input.right = false;
+    input.jumpHeld = false;
+    jumpBuffer = 0;
+    showOverlay(overlayPause);
+  }
+  function resumeGame() {
+    paused = false;
+    ALL_OVERLAYS.forEach((o) => o.classList.add('hidden'));
+  }
+
+  function renderLevels() {
+    levelsList.innerHTML = LEVELS.map((L, i) => {
+      const best = levelBest[L.name] || 0;
+      return '<button class="level-card level-card--' + L.diffClass + '" data-i="' + i + '">' +
+        '<span class="level-card__num">' + L.name + '</span>' +
+        '<span class="level-card__name">' + L.title + '</span>' +
+        '<span class="level-card__diff">' + L.diff + '</span>' +
+        '<span class="level-card__desc">' + L.desc + '</span>' +
+        '<span class="level-card__best">' + (best ? '最佳 ' + String(best).padStart(6, '0') : '尚未通关') + '</span>' +
+      '</button>';
+    }).join('');
+    Array.prototype.forEach.call(levelsList.querySelectorAll('.level-card'), (el) => {
+      el.addEventListener('click', () => startGame(Number(el.getAttribute('data-i'))));
+    });
+  }
+
+  function renderShop() {
+    updateWalletUI();
+    shopList.innerHTML = SKINS.map((skin) => {
+      const owned = skinState.owned.indexOf(skin.id) !== -1;
+      const equipped = skinState.equipped === skin.id;
+      const r = skin.override.R || PAL.R, b = skin.override.B || PAL.B;
+      let btn;
+      if (equipped) btn = '<button class="skin-btn is-on" disabled>使用中</button>';
+      else if (owned) btn = '<button class="skin-btn" data-equip="' + skin.id + '">装备</button>';
+      else btn = '<button class="skin-btn skin-btn--buy" data-buy="' + skin.id + '"' + (wallet < skin.price ? ' disabled' : '') + '>购买 ' + skin.price + ' 🪙</button>';
+      return '<div class="skin-card' + (equipped ? ' is-equipped' : '') + '">' +
+        '<div class="skin-preview" style="--skin-r:' + r + ';--skin-b:' + b + ';"><span class="skin-preview__dot"></span></div>' +
+        '<div class="skin-name">' + skin.name + '</div>' +
+        '<div class="skin-price">' + (skin.price === 0 ? '免费' : skin.price + ' 🪙') + '</div>' +
+        btn +
+      '</div>';
+    }).join('');
+    Array.prototype.forEach.call(shopList.querySelectorAll('[data-buy]'), (el) => {
+      el.addEventListener('click', () => buySkin(el.getAttribute('data-buy')));
+    });
+    Array.prototype.forEach.call(shopList.querySelectorAll('[data-equip]'), (el) => {
+      el.addEventListener('click', () => equipSkin(el.getAttribute('data-equip')));
+    });
+  }
+
+  function buySkin(id) {
+    const skin = SKINS.find((s) => s.id === id);
+    if (!skin || skinState.owned.indexOf(id) !== -1) return;
+    if (wallet < skin.price) { sfx.bump(); return; }
+    wallet -= skin.price;
+    saveWallet();
+    skinState.owned.push(id);
+    saveSkins();
+    renderShop();
+    sfx.coin();
+  }
+  function equipSkin(id) {
+    if (skinState.owned.indexOf(id) === -1) return;
+    skinState.equipped = id;
+    saveSkins();
+    renderShop();
+    sfx.powerup();
+  }
+
+  function settingRow(icon, label, hint, control) {
+    return '<div class="setting">' +
+      '<div><div class="setting__label">' + icon + ' ' + label + '</div><div class="setting__hint">' + hint + '</div></div>' +
+      control + '</div>';
+  }
+  function switchHtml(key, on) {
+    return '<button class="switch' + (on ? ' on' : '') + '" data-k="' + key + '" aria-pressed="' + on + '"></button>';
+  }
+  function renderSettings() {
+    settingsList.innerHTML =
+      settingRow('🔊', '音效', '开启游戏内所有音效', switchHtml('sound', settings.sound)) +
+      '<div class="setting">' +
+        '<div><div class="setting__label">❤️ 初始生命</div><div class="setting__hint">选择每局开始的生命数</div></div>' +
+        '<div class="seg" id="seg-lives">' +
+          '<button data-v="3" class="' + (settings.lives === 3 ? 'on' : '') + '">3</button>' +
+          '<button data-v="5" class="' + (settings.lives === 5 ? 'on' : '') + '">5</button>' +
+        '</div>' +
+      '</div>' +
+      settingRow('📳', '屏幕震动', '踩怪、撞砖时的震动效果', switchHtml('shake', settings.shake)) +
+      settingRow('⏱️', '时间模式', '每关 300 秒倒计时，关闭后不计时', switchHtml('timeMode', settings.timeMode));
+
+    Array.prototype.forEach.call(settingsList.querySelectorAll('.switch'), (el) => {
+      el.addEventListener('click', () => {
+        const k = el.getAttribute('data-k');
+        settings[k] = !settings[k];
+        el.classList.toggle('on', settings[k]);
+        el.setAttribute('aria-pressed', settings[k]);
+        saveSettings();
+      });
+    });
+    Array.prototype.forEach.call(settingsList.querySelectorAll('#seg-lives button'), (el) => {
+      el.addEventListener('click', () => {
+        settings.lives = Number(el.getAttribute('data-v'));
+        Array.prototype.forEach.call(settingsList.querySelectorAll('#seg-lives button'), (b) => b.classList.toggle('on', b === el));
+        saveSettings();
+      });
+    });
+  }
+
+  document.getElementById('btn-start').addEventListener('click', goLevels);
+  document.getElementById('btn-shop').addEventListener('click', goShop);
+  document.getElementById('btn-settings').addEventListener('click', goSettings);
+  document.getElementById('btn-back-menu').addEventListener('click', backToMenu);
+  document.getElementById('btn-back-menu2').addEventListener('click', backToMenu);
+  document.getElementById('btn-back-menu3').addEventListener('click', backToMenu);
+  document.getElementById('btn-restart-win').addEventListener('click', () => startGame());
+  document.getElementById('btn-select-win').addEventListener('click', goLevels);
+  document.getElementById('btn-restart-over').addEventListener('click', () => startGame());
+  document.getElementById('btn-select-over').addEventListener('click', goLevels);
+  document.getElementById('btn-pause').addEventListener('click', pauseGame);
+  document.getElementById('btn-resume').addEventListener('click', resumeGame);
+  document.getElementById('btn-restart-level').addEventListener('click', () => startGame());
+  document.getElementById('btn-pause-select').addEventListener('click', goLevels);
+  document.getElementById('btn-pause-menu').addEventListener('click', backToMenu);
 
   /* ================= 缩放 ================= */
   function resize() {
@@ -1016,8 +1394,14 @@
 
   /* ================= 初始化 ================= */
   resize();
+  loadSettings();
+  loadSkins();
+  loadWallet();
+  loadLevelBest();
+  refreshBest();
   buildLevel(0);
   renderLeaderboard();
+  updateWalletUI();
   updateHUD();
   requestAnimationFrame(loop);
 })();
