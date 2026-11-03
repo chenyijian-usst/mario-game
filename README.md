@@ -39,6 +39,8 @@ mario-game/
 ├── index.html    # 画布、HUD、覆盖层、排行榜、触控按钮
 ├── style.css     # 布局与界面样式
 ├── game.js       # 全部游戏逻辑（关卡、物理、精灵、道具、音效）
+├── .gitignore    # 忽略 .vercel 等本地文件
+├── vercel.json   # Vercel 静态站点部署配置
 └── README.md
 ```
 
